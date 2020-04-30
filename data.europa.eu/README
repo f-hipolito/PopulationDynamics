@@ -1,0 +1,58 @@
+World dataset, aRnzjSwT, downloaded from:
+https://www.ecdc.europa.eu/en/publications-data/download-todays-data-geographic-distribution-covid-19-cases-worldwide
+2020-04-17T21:29
+
+World dataset, 6u83xREK, downloaded from:
+https://www.ecdc.europa.eu/en/publications-data/download-todays-data-geographic-distribution-covid-19-cases-worldwide
+2020-04-25T16:41
+
+Verification sha256sums where locally generated with sha256sum using ubuntu's
+default binary. All check sums can be found at the file sha256sums
+
+RELEVANT INFO COLLECT FROM ON 2020-04-17T21:29
+
+
+
+ COVID-19 Coronavirus data RDF
+Publisher
+European Centre for Disease Prevention and Control »
+Description
+
+The dataset contains the latest available public data on COVID-19 including a daily situation update, the epidemiological curve and the global geographical distribution (EU/EEA and the UK, worldwide).
+
+On 12 February 2020, the novel coronavirus was named severe acute respiratory syndrome coronavirus 2 (SARS-CoV-2) while the disease associated with it is now referred to as COVID-19. Since the beginning of the coronavirus pandemic, ECDC’s Epidemic Intelligence team has been collecting on daily basis the number of COVID-19 cases and deaths, based on reports from health authorities worldwide. To insure the accuracy and reliability of the data, this process is being constantly refined. This helps to monitor and interpret the dynamics of the COVID-19 pandemic not only in the European Union (EU), the European Economic Area (EEA), but also worldwide. Every day between 6.00 and 10.00 CET, a team of epidemiologists screens up to 500 relevant sources to collect the latest figures. The data screening is followed by ECDC’s standard epidemic intelligence process for which every single data entry is validated and documented in an ECDC database. An extract of this database, complete with up-to-date figures and data visualisations, is then shared on the ECDC website, ensuring a maximum level of transparency.
+eurovoc domains
+Health
+Groups
+COVID-19 Coronavirus epidemic
+
+
+
+URI
+    http://data.europa.eu/88u/dataset/covid-19-coronavirus-data
+
+DOI
+    10.2906/101099100099/1
+
+Landing Page
+    https://www.ecdc.europa.eu/en/publications-data/download-todays-data-geographic-distribution-covid-19-cases-worldwide
+
+Accrual Periodicity
+    daily
+
+Temporal Coverage From
+    2019-12-31
+
+Geographical Coverage
+    Netherlands, Norway, Poland, Portugal, Luxembourg, Latvia, North Macedonia, Malta, Romania, Russia, Belgium, Austria, Switzerland, Bulgaria, Cyprus, China, Germany, Czechia, Spain, Denmark, Finland, Estonia, United Kingdom, France, Croatia, Greece, Ireland, Hungary, Lithuania, Sweden, Slovenia, Slovakia, Italy
+
+Language
+    English
+
+related resource
+    http://data.europa.eu/88u/dataset/list-of-publications-and-data
+
+Contact
+ECDC European Centre for Disease Prevention and Control
+
+https://www.ecdc.europa.eu/en/about-ecdc
