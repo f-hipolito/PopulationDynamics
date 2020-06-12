@@ -7,9 +7,12 @@ Main reference file for this project is
 it contains all relevant information and points to other relevant files.
 
 While the primary focus is the propagation of CoViD19, the model is general
-and easy to apply to any population whose growth is governed by a differential
-equation relating the rate of change of population to separable function of
-time and population.
+and easy to apply to any population whose growth is governed by a first order
+differential equation relating the rate of change of population to a function
+of both time (t) and population (n).
+The (initial) scope was restricted to separable functions of t and n, but we
+are now in the process of relaxing this restriction, by introducing additional
+generalizations.
 
 
 ## Data source:
@@ -44,7 +47,8 @@ Datasets identifiers
 1. Models under consideration
     1. the model
         1. Time-dependent environment: _m-_ steady state model
-        2. Beyond the time-dependent environment __WIP__
+        2. General time-dependent rates and decay times
+        3. Coupled differential equations (SIR like models)
     2. application and discussion
         1. Korea
         2. Denmark
@@ -72,15 +76,26 @@ that can be found in the root folder for this project.
 
 User defined auxiliary function are made available via two modules
 * MyFunctions.jl: general purpose user defined functions;
-* Mrate.jl: dedicated to m-steady state model.
+* Mrate.jl: dedicated to m-steady state model and SIR like model functions.
 
-All code was written with Julia 1.4.0, for reference see the
+All code was written with Julia 1.4.2, for reference see the
 [official documentation](https://docs.julialang.org/en/v1.4/).
 Additional required packages and modules (for Julia only):
 * SpecialFunctions
 * MyFunctions, Mrate (local modules provided in the repository)
 * DataFrames, Query, CSV, Dates
-* LsqFit, Optim
+* LsqFit (logistic model only)
+* DifferentialEquations, DiffEqParamEstim, Optim
 * Plots, LaTeXStrings
 A python 3.x version is in the pipeline, but priority is given to project
 development using Julia.
+
+Coupled differential equations are integrated numerically using the
+open source suite [DifferentialEquations.jl](https://docs.sciml.ai/stable/)
+provided by https://sciml.ai/.
+The parameter estimation is performed with
+[DiffEqParamEstim.jl](https://docs.sciml.ai/latest/analysis/parameter_estimation/)
+which in turn uses
+[Optim.jl](https://julianlsolvers.github.io/Optim.jl/stable/#).
+The above-mentioned software packages are written in Julia and are available for
+Julia, Python and R.

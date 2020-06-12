@@ -1,6 +1,7 @@
 module Mrate
 
 export modelm, modelm_j, modelm_h
+export sir_Γ!, sird_Γ!
 
 using SpecialFunctions, MyFunctions
 
@@ -698,5 +699,198 @@ R2 = zeros(Float64, length(x0))
 
 modelm_j(x1, p2, ρ0);
 modelm_h( x1, p2, ρ0 );
+
+
+
+"""
+    sir_Γ!(du,u,t; p, ν=0.01, ρ=[2.0,1.0])
+
+Computes the differential equations for susceptible, infected and removed
+    fractions of the population, using a Gamma distribution for the incubation
+    times.
+Computes the differentials ``du = [ ds, di, dr ]`` for ``u = [ 1-s, i, r ]``
+    evaluated at time ``t`` and parametrized via
+    ``p_0 = \\{ \\omega_0, \\omega_1, t_1, \\ldots \\omega_m, t_m \\}`` where
+    ``\\omega_i`` and ``t_i`` are the ``i^\\mathrm{th}`` growth rate and
+    transition times, respectively. ``\\nu`` is the combined recovery/death
+    decay-like time scale.
+    The distribution of incubation times is parametrized with default values
+    ``\\rho_0 = [ \\alpha_0, \\beta_0 ] = [2,1]``.
+
+Note: we normalized variables with respect to the total population ``N_t``, i.e.
+    population densities, namely
+1. ``s+i+r = 1``
+2. ``s = S/N_t`` susceptible individuals
+3. ``i = I/N_t`` infected    individuals
+4. ``r = R/N_t`` removed     individuals
+
+Furthermore, the equations are written considering for ``1-s`` rather than
+    ``s``, to facilitate the optimization process, as at the initial instant
+    ``s`` is, typically, ``N_t \\sim 10^{6-8}`` times larger than ``i`` and
+    ``r``.
+
+# Sources:
+1. see https://github.com/f-hipolito/PopulationDynamics/blob/master/Population_dynamics.ipynb
+
+# Examples
+```julia-repl
+julia> du0 = zeros(3); u0 = [ 1e-7, 1e-7, 0. ]; t0 = 1.0;
+
+julia> p0 = [ 0.26, 0.01, 34.9 ]; νμ0 = 1/21.0; ρ0 = [ 6.25, 0.96 ];
+
+julia> sir_Γ!(du0,u0,t0; p=p0, ν=νμ0, ρ=ρ0)
+
+julia> @assert isapprox( du0, [2.59999974e-8,2.1238092638e-8,4.761904761e-9] )
+```
+"""
+function sir_Γ!(du,u,t; p, ν=0.01, ρ=[2.0,1.0])
+
+    # basic testing of parameters
+    #
+    len = length(p) +1
+
+    if len < 4
+        error( "insufficient parameters for sir_Γ!" )
+    elseif isodd( len )
+        println( len )
+        error( "requires even number of parameters!" )
+    end
+
+    # loading parameters
+    #
+    #   the growth rates ωᵢ for the m-steady state model
+    m = fld( len, 2) -1     # number m-steady states
+    ω = zeros( len )
+    ω[1] = p[1]
+    ω[3:end] = p[2:end]
+
+    #   the incubation time paramters
+    ρ0 = ρ # ρ₀ = ρ = [ α₀, β₀ ]
+
+    #   compute the "m-steady state" rates
+    #
+    Ω = ω[1]
+    for i=1:m
+        j=2*i
+        Ω += (ω[j+1]-ω[j-1])*FΓ(t-ω[j+2];p=ρ0)
+    end
+
+    #   the differential equations
+    #
+    dr = ν *u[2]
+    ds = Ω *u[2] *(1.0 -u[1])
+    du[1] =  ds                 #   u[1] ≣ 1 -susceptible
+    du[2] =  di = ds -dr        #   u[2] ≣ infected
+    du[3] =  dr                 #   u[3] ≣ removed
+end
+
+du0 = zeros(3); u0 = [ 1e-7, 1e-7, 0. ]; t0 = 1.0;
+
+p0 = [ 0.26, 0.01, 34.9 ]; νμ0 = 1/21.0; ρ0 = [ 6.25, 0.96 ];
+
+sir_Γ!(du0,u0,t0; p=p0, ν=νμ0, ρ=ρ0)
+
+@assert isapprox( du0, [ 2.59999974e-8, 2.1238092638e-8, 4.761904761e-9 ] )
+
+
+
+
+
+
+"""
+    sird_Γ!(du,u,t; p, νμ=[1e-2,1e-4], ρ=[2.0,1.0] )
+
+Computes the differential equations for susceptible, infected, recovered and
+    deceased fractions of the population, using a Gamma distribution for the
+    incubation times.
+Computes the differentials ``du = [ ds, di, dr, dd ]`` for
+    ``u = [ 1-s, i, r, d ]`` evaluated at time ``t`` and parametrized via
+    ``p = \\{ \\omega_0, \\omega_1, t_1, \\ldots \\omega_m, t_m \\}``
+    where ``\\omega_i`` and ``t_i`` are the ``i^\\mathrm{th}`` growth rate and
+    transition times, respectively. ``\\nu,\\, \\mu`` are the recovery and death
+    decay-like time scales.
+    The distribution of incubation times is parametrized with default values
+    ``\\rho_0 = [ \\alpha_0, \\beta_0 ] = [2,1]``.
+
+Note: we normalized variables with respect to the total population ``N_t``, i.e.
+    population densities, namely
+1. ``s+i+r = 1``
+2. ``s = S/N_t`` susceptible individuals
+3. ``i = I/N_t`` infected    individuals
+4. ``r = R/N_t`` recovered   individuals
+5. ``d = D/N_t`` deceased    individuals
+
+Furthermore, the equations are written considering for ``1-s`` rather than
+    ``s``, to facilitate the optimization process, as at the initial instant
+    ``s`` is, typically, ``N_t \\sim 10^{6-8}`` times larger than ``i`` and
+    ``r``.
+
+# Sources:
+1. see https://github.com/f-hipolito/PopulationDynamics/blob/master/Population_dynamics.ipynb
+
+# Examples
+```julia-repl
+julia> du0 = zeros(4); u0 = [ 1e-7,1e-7,0.,0. ]; t0 = 1.0;
+
+julia> p0 = [ 0.26, 0.01, 34.9 ]; νμ0 = [ 1/21.0, 0.5/21 ]; ρ0 = [ 6.25, 0.96 ];
+
+julia> sird_Γ!(du0,u0,t0; p=p0, νμ=νμ0, ρ=ρ0)
+
+julia> @assert isapprox(du0,[2.59999974e-8,1.885714025e-8,4.76190476e-9,2.38095238e-9])
+```
+"""
+function sird_Γ!(du,u,t; p, νμ = [ 1e-2, 1e-4 ], ρ=[2.0,1.0])
+        # basic testing of parameters
+    #
+    len = length(p) +1
+
+    if len < 4
+        error( "insufficient parameters for sird_Γ!" )
+    elseif isodd( len )
+        println( len )
+        error( "requires even number of p parameters!" )
+    end
+
+    # loading parameters
+    #
+    #   the growth rates ωᵢ for the m-steady state model
+    m = fld( len, 2) -1     # number m-steady states
+    ω = zeros( len )
+    ω[1] = p[1]
+    ω[3:end] = p[2:end]
+
+    #   the incubation time paramters
+    ρ0 = ρ # ρ₀ = ρ = [ α₀, β₀ ]
+
+    #   the infection decay time
+    ν = νμ[1]
+    μ = νμ[2]
+
+    #   compute the "m-steady state" rates
+    #
+    Ω = ω[1]
+    for i=1:m
+        j=2*i
+        Ω += (ω[j+1]-ω[j-1])*FΓ(t-ω[j+2];p=ρ0)
+    end
+
+    #   the differential equations
+    #
+    dr = ν *u[2]
+    dd = μ *u[2]
+    ds = Ω *u[2] *( 1.0 -u[1] )
+    du[1] =  ds                 #   u[1] ≣ 1 -susceptible
+    du[2] =  di = ds -dr -dd    #   u[2] ≣ infected
+    du[3] =  dr                 #   u[3] ≣ recovered
+    du[4] =  dd                 #   u[3] ≣ deceased
+end
+
+du0 = zeros(4); u0 = [ 1e-7, 1e-7, 0., 0. ]; t0 = 1.0;
+
+p0 = [ 0.26, 0.01, 34.9 ]; νμ0 = [ 1/21.0, 0.5/21 ]; ρ0 = [ 6.25, 0.96 ];
+
+sird_Γ!(du0,u0,t0; p=p0, νμ=νμ0, ρ=ρ0)
+
+@assert isapprox(du0,[2.59999974e-8,1.885714025e-8,4.76190476e-9,2.38095238e-9])
 
 end
