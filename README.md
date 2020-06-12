@@ -13,21 +13,31 @@ time and population.
 
 
 ## Data source:
-We collected our data from the publicly available data _European Centre for
-Disease Prevention and Control_ (ECDC)
-[site](https://www.ecdc.europa.eu/en/publications-data/download-todays-data-geographic-distribution-covid-19-cases-worldwide)
-for daily updates on CoViD19 cases.
+We collected our data from two sources.
+First data source, used up to 2020-05-13 is the _European Centre for Disease
+Prevention and Control_ (ECDC).
+Second data source, used from 2020-05-13 until present is the _datahub.io_
+dataset on [CoViD19](https://github.com/datasets/covid-19).
+This is sourced from this upstream repository maintained by the team at
+[Johns Hopkins University Center for Systems Science and Engineering](https://systems.jhu.edu/) (JHU CSSE)
 
-Dataset copyright belongs to ECDC, visit
-https://www.ecdc.europa.eu/en/copyright or refer to attached file
-_ECDC_Copyright_ for full copyright information).
+Primary reason to changing to the JHU CSSE data set was the absence of recovered
+data in the ECDC dataset.
 
-Datasets
-* _aRnzjSwT_ collected on 2020-04-17T21:29
-* _6u83xREK_ collected on 2020-04-25T16:41
 
-Upon accessing the datasets sha256 checksum were generated locally to verify
-data integrity, the check sums are available in attached file _sha256sums_.
+Data is publicly available at:
+* _datahub.io/covid-19_ available at [github repository](https://github.com/datasets/covid-19)
+  1. the original dataset from JHU CSSE is available at
+  [github repository](https://github.com/CSSEGISandData/COVID-19)
+* ECDC [site](https://www.ecdc.europa.eu/en/publications-data/download-todays-data-geographic-distribution-covid-19-cases-worldwide)
+Copyright information available in the respective urls.
+
+Datasets identifiers
+* datahub.io/covid-19 (commit hash)
+    1.  _3df63747aeab5d03936459ccfdd536970a9db164_ collected on 2020-06-08
+* ECDC (checksums available in _sha256sums_ file)
+    1. _aRnzjSwT_ collected on 2020-04-17T21:29
+    2. _6u83xREK_ collected on 2020-04-25T16:41
 
 
 ## Contents of _PopulationDynamics.ipynb_

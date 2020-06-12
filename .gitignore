@@ -1,6 +1,7 @@
 # my gitignore instructions
 *.zip
 img/
+datahub.io/
 .ipynb_checkpoints/
 
 
