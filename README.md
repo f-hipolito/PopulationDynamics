@@ -11,8 +11,18 @@ and easy to apply to any population whose growth is governed by a first order
 differential equation relating the rate of change of population to a function
 of both time (t) and population (n).
 The (initial) scope was restricted to separable functions of t and n, but we
-are now in the process of relaxing this restriction, by introducing additional
+are now in the process of relaxing this restriction, by introducing further
 generalizations.
+
+__Important note to the readers:__
+I am neither an epidemiologist or virologist! I'm just a curious physicist
+trying to understand and make some sense of the vast amounts of data on CoViD19
+available online, and willing to share it for other curious minds to explore as
+well.
+It should go without saying, but I will still state the obvious advice
+nonetheless:
+** _None_ of information made available in this repository _serves as
+credible_ source of _information on COVID19_ ** .
 
 
 ## Data source:
@@ -78,7 +88,7 @@ User defined auxiliary function are made available via two modules
 * MyFunctions.jl: general purpose user defined functions;
 * Mrate.jl: dedicated to m-steady state model and SIR like model functions.
 
-All code was written with Julia 1.4.2, for reference see the
+All code was written with Julia 1.4.x, for reference see the
 [official documentation](https://docs.julialang.org/en/v1.4/).
 Additional required packages and modules (for Julia only):
 * SpecialFunctions
